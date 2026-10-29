@@ -195,9 +195,9 @@ export default function App() {
             </svg>
           </span>
           <p className="brand__intro">
-            Olá, meu nome é Thiago Lima. Sou fisioterapeuta e acredito em um
-            cuidado próximo, humano e feito com calma, respeitando a história e
-            o ritmo de cada pessoa.
+            Olá, sou Thiago Solidade, fisioterapeuta em Salvador, Bahia. Acredito
+            em um cuidado próximo, humano e feito com calma, respeitando a
+            história e o ritmo de cada pessoa.
           </p>
         </div>
       </section>
