@@ -134,6 +134,8 @@ export default function App() {
     }
 
     let frameId = 0;
+    let introRevealed = false;
+    let formRevealed = false;
 
     const updateProgress = () => {
       const viewportHeight = window.innerHeight;
@@ -147,11 +149,15 @@ export default function App() {
         Math.ceil(window.scrollY + viewportHeight) >=
         document.documentElement.scrollHeight - 2;
 
+      introRevealed =
+        introRevealed || reducedMotion || hasLeftAbout || atPageEnd;
+      formRevealed = formRevealed || reducedMotion || atPageEnd;
+
       section.classList.toggle(
         "appointment--intro-revealed",
-        reducedMotion || hasLeftAbout || atPageEnd,
+        introRevealed,
       );
-      section.classList.toggle("appointment--revealed", reducedMotion || atPageEnd);
+      section.classList.toggle("appointment--revealed", formRevealed);
     };
 
     const scheduleUpdate = () => {
