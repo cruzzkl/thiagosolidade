@@ -6,6 +6,46 @@ export default function App() {
   const [photoAvailable, setPhotoAvailable] = useState(true);
   const [appointmentDate, setAppointmentDate] = useState("");
 
+  function handlePortraitPointerMove(event) {
+    if (event.pointerType === "touch") {
+      return;
+    }
+
+    const scene = event.currentTarget.querySelector(".about__portrait-scene");
+
+    if (!scene) {
+      return;
+    }
+
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const pointerX = (event.clientX - bounds.left) / bounds.width;
+    const pointerY = (event.clientY - bounds.top) / bounds.height;
+
+    scene.style.setProperty(
+      "--portrait-rotate-x",
+      `${(0.5 - pointerY) * 18}deg`,
+    );
+    scene.style.setProperty(
+      "--portrait-rotate-y",
+      `${(pointerX - 0.5) * 18}deg`,
+    );
+    scene.style.setProperty("--portrait-glow-x", `${pointerX * 100}%`);
+    scene.style.setProperty("--portrait-glow-y", `${pointerY * 100}%`);
+  }
+
+  function handlePortraitPointerLeave(event) {
+    const scene = event.currentTarget.querySelector(".about__portrait-scene");
+
+    if (!scene) {
+      return;
+    }
+
+    scene.style.setProperty("--portrait-rotate-x", "0deg");
+    scene.style.setProperty("--portrait-rotate-y", "0deg");
+    scene.style.setProperty("--portrait-glow-x", "50%");
+    scene.style.setProperty("--portrait-glow-y", "35%");
+  }
+
   function handleAppointmentDateChange(event) {
     const input = event.currentTarget;
     const digits = input.value.replace(/\D/g, "").slice(0, 8);
@@ -208,23 +248,36 @@ export default function App() {
         ref={aboutRef}
       >
         <div className="about__inner">
-          <figure className="about__portrait">
-            {photoAvailable ? (
-              <img
-                src="/images/thiago-solidade.png"
-                alt="Thiago Solidade, fisioterapeuta"
-                onError={() => setPhotoAvailable(false)}
-              />
-            ) : (
-              <div className="about__portrait-placeholder">
-                <span className="about__portrait-initials">TS</span>
-                <span className="about__portrait-note">
-                  Adicione sua foto em
-                  <br />
-                  public/images/thiago-solidade.png
-                </span>
-              </div>
-            )}
+          <figure
+            className="about__portrait"
+            onPointerLeave={handlePortraitPointerLeave}
+            onPointerMove={handlePortraitPointerMove}
+          >
+            <div className="about__portrait-scene">
+              {photoAvailable ? (
+                <img
+                  src="/images/thiago-solidade.png"
+                  alt="Thiago Solidade, fisioterapeuta"
+                  width="768"
+                  height="1152"
+                  loading="lazy"
+                  decoding="async"
+                  onError={() => setPhotoAvailable(false)}
+                />
+              ) : (
+                <div className="about__portrait-placeholder">
+                  <span className="about__portrait-initials">TS</span>
+                  <span className="about__portrait-note">
+                    Adicione sua foto em
+                    <br />
+                    public/images/thiago-solidade.png
+                  </span>
+                </div>
+              )}
+              {photoAvailable && (
+                <span className="about__portrait-glow" aria-hidden="true" />
+              )}
+            </div>
           </figure>
           <div className="about__content">
             <p className="about__eyebrow">
